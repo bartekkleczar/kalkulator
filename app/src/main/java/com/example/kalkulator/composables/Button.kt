@@ -14,19 +14,33 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CalculatorButton(text: String, modifier: Modifier = Modifier, onclick: () -> Unit) {
+fun CalculatorButton(text: String, state: Boolean, modifier: Modifier = Modifier, onclick: () -> Unit) {
     val configuration = LocalConfiguration.current
     val sH = configuration.screenHeightDp.dp
     val sW = configuration.screenWidthDp.dp
-    FilledTonalButton(modifier = modifier.width(sW/4.7f).height(sH/11), onClick = { onclick() }) {
+    FilledTonalButton(modifier = modifier.width(decreaseWidth(sW, state)).height(sH/11), onClick = { onclick() }) {
         Text(
             text = text,
-            fontSize = 25.sp,
+            fontSize = decreaseFontSize(state),
             fontWeight = FontWeight.Bold
         )
+    }
+}
+fun decreaseWidth(sw: Dp,state: Boolean): Dp{
+    return when(state){
+        true -> sw/5f
+        false -> sw/4.7f
+    }
+}
+
+fun decreaseFontSize(state: Boolean): TextUnit{
+    return when(state){
+        true -> 23.sp
+        false -> 25.sp
     }
 }
