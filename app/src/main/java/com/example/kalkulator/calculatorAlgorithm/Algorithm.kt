@@ -1,5 +1,8 @@
 package com.example.kalkulator.calculatorAlgorithm
 
+import java.math.RoundingMode
+import java.text.DecimalFormat
+
 fun calculate(input: List<Any>): Any {
     val input = input.toMutableList()
     val inputCopy = input.toMutableList()
@@ -25,7 +28,9 @@ fun calculate(input: List<Any>): Any {
     return if((out % 1f) == 0f){
         out.toInt()
     }else{
-        out
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.HALF_UP
+        df.format(out)
     }
 }
 

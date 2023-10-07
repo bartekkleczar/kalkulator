@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +23,10 @@ fun TopBar(){
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "Calculator")
+                    Text(
+                        text = "Calculator",
+                        fontSize = 25.sp
+                    )
                 },
                 actions = {
                     IconButton(onClick = { /*TODO*/ }) {
