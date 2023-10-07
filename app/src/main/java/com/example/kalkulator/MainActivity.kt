@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,11 +57,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SetLayout(){
+fun SetLayout() {
     val configuration = LocalConfiguration.current
     val sH = configuration.screenHeightDp.dp
     val sW = configuration.screenWidthDp.dp
-    val spacer = sH/150
+    val spacer = sH / 150
     val calculations = remember {
         mutableStateListOf<Any>()
     }
@@ -67,12 +69,12 @@ fun SetLayout(){
     Column(
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier.fillMaxSize(0.5f)
-    ){
+    ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp, end = 20.dp),
-            text = calculations.joinToString(separator = "") { displayToString(it) },
+            text = calculations.joinToString(separator = "" ) { displayToString(it) },
             textAlign = TextAlign.Right,
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp,
@@ -84,28 +86,62 @@ fun SetLayout(){
         val times = Times()
         val divide = Divide()
         val percent = Percent()
+
+        val state = remember {
+            MutableTransitionState(false).apply {
+                targetState = false
+            }
+        }
+        AnimatedVisibility(visibleState = state) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                CalculatorButton(text = "^", state.targetState){
+
+                }
+                CalculatorButton(text = "lg", state.targetState){
+
+                }
+                CalculatorButton(text = "ln", state.targetState){
+
+                }
+                CalculatorButton(text = "(", state.targetState){
+
+                }
+                CalculatorButton(text = ")", state.targetState){
+
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(spacer))
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
-        ){
-            CalculatorButton(text = "AC") {
+        ) {
+            AnimatedVisibility(visibleState = state) {
+                CalculatorButton(text = "√", state.targetState){
+
+                }
+            }
+            CalculatorButton(text = "AC", state.targetState){
                 calculations.clear()
             }
-            CalculatorButton(text = "C") {
-                if(calculations.isNotEmpty()){
+            CalculatorButton(text = "C", state.targetState){
+                if (calculations.isNotEmpty()) {
                     calculations.remove(calculations.last())
                 }
             }
-            CalculatorButton(text = "%") {
-                when(calculations.last()) {
+            CalculatorButton(text = "%", state.targetState){
+                when (calculations.last()) {
                     !is Operator -> calculations.add(percent)
-                    else -> calculations[calculations.size-1] = percent
+                    else -> calculations[calculations.size - 1] = percent
                 }
             }
-            CalculatorButton(text = "÷") {
-                when(calculations.last()) {
+            CalculatorButton(text = "÷", state.targetState){
+                when (calculations.last()) {
                     !is Operator -> calculations.add(divide)
-                    else -> calculations[calculations.size-1] = divide
+                    else -> calculations[calculations.size - 1] = divide
                 }
             }
         }
@@ -113,32 +149,37 @@ fun SetLayout(){
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
-        ){
-            CalculatorButton(text = "7") {
+        ) {
+            AnimatedVisibility(visibleState = state) {
+                CalculatorButton(text = "!", state.targetState){
+
+                }
+            }
+            CalculatorButton(text = "7", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("7")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}7"
+                    calculations[calculations.size - 1] = "${calculations.last()}7"
                 }
             }
-            CalculatorButton(text = "8") {
+            CalculatorButton(text = "8", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("8")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}8"
+                    calculations[calculations.size - 1] = "${calculations.last()}8"
                 }
             }
-            CalculatorButton(text = "9") {
+            CalculatorButton(text = "9", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("9")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}9"
+                    calculations[calculations.size - 1] = "${calculations.last()}9"
                 }
             }
-            CalculatorButton(text = "×") {
-                when(calculations.last()) {
+            CalculatorButton(text = "×", state.targetState){
+                when (calculations.last()) {
                     !is Operator -> calculations.add(times)
-                    else -> calculations[calculations.size-1] = times
+                    else -> calculations[calculations.size - 1] = times
                 }
             }
         }
@@ -146,33 +187,38 @@ fun SetLayout(){
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
-        ){
-            CalculatorButton(text = "4") {
+        ) {
+            AnimatedVisibility(visibleState = state) {
+                CalculatorButton(text = "e", state.targetState){
+
+                }
+            }
+            CalculatorButton(text = "4", state.targetState){
 
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("4")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}4"
-                } 
+                    calculations[calculations.size - 1] = "${calculations.last()}4"
+                }
             }
-            CalculatorButton(text = "5") {
+            CalculatorButton(text = "5", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("5")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}5"
+                    calculations[calculations.size - 1] = "${calculations.last()}5"
                 }
             }
-            CalculatorButton(text = "6") {
+            CalculatorButton(text = "6", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("6")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}6"
+                    calculations[calculations.size - 1] = "${calculations.last()}6"
                 }
             }
-            CalculatorButton(text = "-") {
-                when(calculations.last()) {
+            CalculatorButton(text = "-", state.targetState){
+                when (calculations.last()) {
                     !is Operator -> calculations.add(minus)
-                    else -> calculations[calculations.size-1] = minus
+                    else -> calculations[calculations.size - 1] = minus
                 }
             }
         }
@@ -180,32 +226,37 @@ fun SetLayout(){
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
-        ){
-            CalculatorButton(text = "1") {
+        ) {
+            AnimatedVisibility(visibleState = state) {
+                CalculatorButton(text = "π", state.targetState){
+
+                }
+            }
+            CalculatorButton(text = "1", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("1")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}1"
+                    calculations[calculations.size - 1] = "${calculations.last()}1"
                 }
             }
-            CalculatorButton(text = "2") {
+            CalculatorButton(text = "2", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("2")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}2"
+                    calculations[calculations.size - 1] = "${calculations.last()}2"
                 }
             }
-            CalculatorButton(text = "3") {
+            CalculatorButton(text = "3", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("3")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}3"
+                    calculations[calculations.size - 1] = "${calculations.last()}3"
                 }
             }
-            CalculatorButton(text = "+") {
-                when(calculations.last()) {
+            CalculatorButton(text = "+", state.targetState){
+                when (calculations.last()) {
                     !is Operator -> calculations.add(plus)
-                    else -> calculations[calculations.size-1] = plus
+                    else -> calculations[calculations.size - 1] = plus
                 }
             }
         }
@@ -213,27 +264,27 @@ fun SetLayout(){
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
-        ){
-            CalculatorButton(text = " ") {
-
+        ) {
+            CalculatorButton(text = " ", state.targetState){
+                state.targetState = !state.targetState
             }
-            CalculatorButton(text = "0") {
+            CalculatorButton(text = "0", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("0")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}0"
+                    calculations[calculations.size - 1] = "${calculations.last()}0"
                 }
             }
-            CalculatorButton(text = ".") {
+            CalculatorButton(text = ".", state.targetState){
                 if (calculations.isEmpty() || calculations.last() !is String) {
                     calculations.add("0.")
                 } else {
-                    calculations[calculations.size-1] = "${calculations.last()}."
+                    calculations[calculations.size - 1] = "${calculations.last()}."
                 }
             }
-            CalculatorButton(text = "=") {
+            CalculatorButton(text = "=", state.targetState){
                 Log.e("Main", "${calculations.toList()}")
-                Log.e("Main",calculate(calculations).toString())
+                Log.e("Main", calculate(calculations).toString())
                 calculations.add(" = ${calculate(calculations)}")
             }
         }
