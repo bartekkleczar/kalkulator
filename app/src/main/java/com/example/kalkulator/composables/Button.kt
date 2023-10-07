@@ -22,7 +22,7 @@ fun CalculatorButton(text: String, modifier: Modifier = Modifier, onclick: () ->
     val configuration = LocalConfiguration.current
     val sH = configuration.screenHeightDp.dp
     val sW = configuration.screenWidthDp.dp
-    FilledTonalButton(modifier = modifier.width(sW/5).height(sH/10), onClick = { onclick() }) {
+    FilledTonalButton(modifier = modifier.width(sW/4.7f).height(sH/11), onClick = { onclick() }) {
         Text(
             text = text,
             fontSize = 25.sp,

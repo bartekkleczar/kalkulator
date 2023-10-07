@@ -17,7 +17,7 @@ class Plus : Operator {
     }
 
     override fun display(): String {
-        return "+"
+        return " + "
     }
 
 }
@@ -28,7 +28,7 @@ class Minus : Operator {
     }
 
     override fun display(): String {
-        return "-"
+        return " - "
     }
 }
 
@@ -38,7 +38,7 @@ class Times : Operator {
     }
 
     override fun display(): String {
-        return "*"
+        return " × "
     }
 }
 
@@ -48,7 +48,7 @@ class Divide : Operator {
     }
 
     override fun display(): String {
-        return "/"
+        return " ÷ "
     }
 }
 
@@ -58,6 +58,6 @@ class Percent : Operator {
     }
 
     override fun display(): String {
-        return "%"
+        return " % "
     }
 }

@@ -75,7 +75,9 @@ fun SetLayout(){
             text = calculations.joinToString(separator = "") { displayToString(it) },
             textAlign = TextAlign.Right,
             fontWeight = FontWeight.Bold,
-            fontSize = 50.sp,
+            fontSize = 40.sp,
+            lineHeight = 50.sp,
+            softWrap = true
         )
         val plus = Plus()
         val minus = Minus()
@@ -100,7 +102,7 @@ fun SetLayout(){
                     else -> calculations[calculations.size-1] = percent
                 }
             }
-            CalculatorButton(text = "/") {
+            CalculatorButton(text = "÷") {
                 when(calculations.last()) {
                     !is Operator -> calculations.add(divide)
                     else -> calculations[calculations.size-1] = divide
@@ -128,12 +130,12 @@ fun SetLayout(){
             }
             CalculatorButton(text = "9") {
                 if (calculations.isEmpty() || calculations.last() !is String) {
-                    calculations.add(9)
+                    calculations.add("9")
                 } else {
                     calculations[calculations.size-1] = "${calculations.last()}9"
                 }
             }
-            CalculatorButton(text = "X") {
+            CalculatorButton(text = "×") {
                 when(calculations.last()) {
                     !is Operator -> calculations.add(times)
                     else -> calculations[calculations.size-1] = times
@@ -232,7 +234,7 @@ fun SetLayout(){
             CalculatorButton(text = "=") {
                 Log.e("Main", "${calculations.toList()}")
                 Log.e("Main",calculate(calculations).toString())
-                calculations.add("=${calculate(calculations)}")
+                calculations.add(" = ${calculate(calculations)}")
             }
         }
         Spacer(modifier = Modifier.height(spacer))
