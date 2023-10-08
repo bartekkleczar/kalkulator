@@ -1,5 +1,10 @@
 package com.example.kalkulator.composables
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -19,11 +24,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CalculatorButton(text: String, state: Boolean, modifier: Modifier = Modifier, onclick: () -> Unit) {
+fun CalculatorButton(text: String, state: Boolean, size: Float, modifier: Modifier = Modifier, onclick: () -> Unit) {
     val configuration = LocalConfiguration.current
     val sH = configuration.screenHeightDp.dp
     val sW = configuration.screenWidthDp.dp
-    FilledTonalButton(modifier = modifier.width(decreaseWidth(sW, state)).height(sH/11), onClick = { onclick() }) {
+    FilledTonalButton(modifier = modifier
+        .animateContentSize(
+
+        )
+        .width(sW/size)
+        .height(sH/11),
+        onClick = { onclick() }
+    ) {
         Text(
             text = text,
             fontSize = decreaseFontSize(state),
@@ -34,7 +46,7 @@ fun CalculatorButton(text: String, state: Boolean, modifier: Modifier = Modifier
 fun decreaseWidth(sw: Dp,state: Boolean): Dp{
     return when(state){
         true -> sw/5f
-        false -> sw/4.7f
+        false -> sw/4.2f
     }
 }
 
