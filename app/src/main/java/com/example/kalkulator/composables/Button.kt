@@ -38,7 +38,7 @@ fun CalculatorButton(text: String, state: Boolean, modifier: Modifier = Modifier
     ) {
         Text(
             text = text,
-            fontSize = 25.sp,
+            fontSize = 23.sp,
             fontWeight = FontWeight.Bold
         )
     }

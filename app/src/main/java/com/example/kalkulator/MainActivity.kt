@@ -27,11 +27,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalkulator.calculatorAlgorithm.Divide
+import com.example.kalkulator.calculatorAlgorithm.Factorial
+import com.example.kalkulator.calculatorAlgorithm.Lg
+import com.example.kalkulator.calculatorAlgorithm.Ln
 import com.example.kalkulator.calculatorAlgorithm.Minus
+import com.example.kalkulator.calculatorAlgorithm.Modulator
 import com.example.kalkulator.calculatorAlgorithm.Operator
 import com.example.kalkulator.calculatorAlgorithm.Percent
 import com.example.kalkulator.calculatorAlgorithm.Plus
 import com.example.kalkulator.calculatorAlgorithm.Power
+import com.example.kalkulator.calculatorAlgorithm.Root
 import com.example.kalkulator.calculatorAlgorithm.Times
 import com.example.kalkulator.calculatorAlgorithm.calculate
 import com.example.kalkulator.calculatorAlgorithm.displayToString
@@ -87,6 +92,10 @@ fun SetLayout() {
         val divide = Divide()
         val percent = Percent()
         val power = Power()
+        val root = Root()
+        val lg = Lg()
+        val ln = Ln()
+        val factorial = Factorial()
 
         val state = remember {
             MutableTransitionState(false).apply {
@@ -107,16 +116,22 @@ fun SetLayout() {
                     }
                 }
                 CalculatorButton(text = "lg", state.targetState){
-
+                    when (calculations.last()) {
+                        !is Operator -> calculations.add(lg)
+                        else -> calculations[calculations.size - 1] = lg
+                    }
                 }
                 CalculatorButton(text = "ln", state.targetState){
-
+                    when (calculations.last()) {
+                        !is Modulator -> calculations.add(ln)
+                        else -> calculations[calculations.size - 1] = ln
+                    }
                 }
                 CalculatorButton(text = "(", state.targetState){
-
+                    calculations.add("(")
                 }
                 CalculatorButton(text = ")", state.targetState){
-
+                    calculations.add(")")
                 }
             }
         }
@@ -128,7 +143,11 @@ fun SetLayout() {
                 visibleState = state,
             ) {
                 CalculatorButton(text = "√", state.targetState){
-
+                    if(calculations.isEmpty()) calculations.add(root)
+                    when (calculations.last()) {
+                        !is Operator -> calculations.add(root)
+                        else -> calculations[calculations.size - 1] = root
+                    }
                 }
             }
             CalculatorButton(text = "AC", state.targetState){
@@ -161,25 +180,28 @@ fun SetLayout() {
             ) {
 
                 CalculatorButton(text = "!", state.targetState){
-
+                    when (calculations.last()) {
+                        !is Modulator -> calculations.add(factorial)
+                        else -> calculations[calculations.size - 1] = percent
+                    }
                 }
             }
             CalculatorButton(text = "7", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("7")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}7"
                 }
             }
             CalculatorButton(text = "8", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("8")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}8"
                 }
             }
             CalculatorButton(text = "9", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("9")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}9"
@@ -205,21 +227,21 @@ fun SetLayout() {
             }
             CalculatorButton(text = "4", state.targetState){
 
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("4")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}4"
                 }
             }
             CalculatorButton(text = "5", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("5")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}5"
                 }
             }
             CalculatorButton(text = "6", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("6")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}6"
@@ -244,21 +266,21 @@ fun SetLayout() {
                 }
             }
             CalculatorButton(text = "1", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("1")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}1"
                 }
             }
             CalculatorButton(text = "2", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("2")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}2"
                 }
             }
             CalculatorButton(text = "3", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("3")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}3"
@@ -280,14 +302,14 @@ fun SetLayout() {
                 state.targetState = !state.targetState
             }
             CalculatorButton(text = "0", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("0")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}0"
                 }
             }
             CalculatorButton(text = ".", state.targetState){
-                if (calculations.isEmpty() || calculations.last() !is String) {
+                if (calculations.isEmpty() || calculations.last() !is String || calculations.last() == "(" || calculations.last() == ")") {
                     calculations.add("0.")
                 } else {
                     calculations[calculations.size - 1] = "${calculations.last()}."
