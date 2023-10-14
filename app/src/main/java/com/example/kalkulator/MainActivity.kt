@@ -5,7 +5,10 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kalkulator.calculatorAlgorithm.Divide
@@ -85,12 +90,16 @@ fun SetLayout() {
         var wasSummed by remember {
             mutableStateOf(false)
         }
-
+        val yOffset by animateDpAsState(
+            targetValue = if (wasSummed) 20.dp else (-10).dp,
+            animationSpec = tween(500), label = ""
+        )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp, end = 20.dp),
-            text = calculations.joinToString(separator = "" ) { displayToString(it) },
+                .padding(bottom = 20.dp, end = 20.dp)
+                .offset(y = yOffset),
+            text = calculations.joinToString(separator = "") { displayToString(it) },
             textAlign = TextAlign.Right,
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp,
@@ -100,10 +109,22 @@ fun SetLayout() {
         var sum by remember {
             mutableStateOf("")
         }
+        val enterExitAnimationDurationInt: FiniteAnimationSpec<IntOffset> =
+            tween(durationMillis = 500)
+        val enterExitAnimationDurationFloat: FiniteAnimationSpec<Float> =
+            tween(durationMillis = 500)
         AnimatedVisibility(
             visible = wasSummed,
-            enter = slideInVertically() + fadeIn(),
-            exit = slideOutVertically() + fadeOut()
+            enter = slideInVertically(
+                animationSpec = enterExitAnimationDurationInt
+            ) + fadeIn(
+                animationSpec = enterExitAnimationDurationFloat
+            ),
+            exit = slideOutVertically(
+                animationSpec = enterExitAnimationDurationInt
+            ) + fadeOut(
+                animationSpec = enterExitAnimationDurationFloat
+            )
         ) {
             Text(
                 modifier = Modifier
